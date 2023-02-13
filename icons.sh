@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-icon_nix=''
-icon_clock=''
-icon_home=''
-icon_arrow='❯'
-icon_git=''
-icon_warn=''
+ICON_NIX=''
+ICON_CLOCK=''
+ICON_HOME=''
+ICON_ARROW='❯'
+ICON_GIT=''
+ICON_WARN=''
+ICON_FOLDER=''

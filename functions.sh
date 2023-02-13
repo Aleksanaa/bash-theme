@@ -15,22 +15,44 @@ shrink_path() {
 	fi
 	_color green
 	if [[ ${path} == "~" ]]; then
-		echo "${ICON_HOME} ~"
+		printf "${ICON_HOME} ~"
 	else
-		echo "${ICON_FOLDER} ${path}"
+		printf "${ICON_FOLDER} ${path}"
 	fi
 	_reset
-
 }
 
 # Implements lazy loading on path
 get_path() {
 	CURRENT_REAL_PATH=$(pwd)
-	if [ "${CACHED_REAL_PATH}" == "${CURRENT_REAL_PATH}" ]; then
-		echo "${CACHED_SHRINK_PATH}"
-	else
+	if [ ! "${CACHED_REAL_PATH}" == "${CURRENT_REAL_PATH}" ]; then
 		CACHED_SHRINK_PATH=$(shrink_path "${CURRENT_REAL_PATH}")
 		CACHED_REAL_PATH=${CURRENT_REAL_PATH}
-		echo "${CACHED_SHRINK_PATH}"
 	fi
+	printf "${CACHED_SHRINK_PATH}"
+}
+
+get_hostname() {
+	[ -z ${HOSTNAME} ] && HOSTNAME=$(cat /proc/sys/kernel/hostname)
+	_color purple
+	printf "${HOSTNAME}"
+	_reset
+}
+
+get_nixshell() {
+	_color blue
+	if [[ ${PATH} == /nix/store/* ]]; then
+		printf "${ICON_NIX}"
+	fi
+	_reset
+}
+
+get_arrow() {
+	if [ $? -eq 0 ]; then
+		_color yellow
+	else
+		_color red
+	fi
+	printf "${ICON_ARROW}"
+	_reset
 }
