@@ -5,7 +5,7 @@
 
 # I'm trying to make the scripts structured and self-explanatory.
 
-[[ $0 != $BASH_SOURCE ]] && (echo "Source this file!"; exit 1)
+[[ $0 == $BASH_SOURCE ]] && (echo "Source this file!"; exit 1)
 
 source $(dirname $BASH_SOURCE)/functions.sh
 
