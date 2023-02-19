@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-source $(dirname $0)/colors.sh
-source $(dirname $0)/icons.sh
+source $(dirname $BASH_SOURCE)/colors.sh
+source $(dirname $BASH_SOURCE)/icons.sh
 
 # trim function, from dylanaraps
 # https://github.com/dylanaraps/pure-sh-bible#trim-all-white-space-from-string-and-truncate-spaces
