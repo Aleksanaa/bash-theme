@@ -8,11 +8,13 @@
 
 source ./functions.sh
 
-# set prompt order
-MY_PROMPTS="$(get_hostname) :: $(get_path) $(get_gitstatus) $(get_arrow)"
-
-# applying the prompt
 PROMPT_COMMAND=prompting
 prompting() {
-	export PS1="$(trim_all ${MY_PROMPTS}) "
+	last_exitcode=$?
+	# set prompt order
+	prompts="$(get_hostname) :: $(get_path) $(get_gitstatus) $(get_arrow ${last_exitcode})"
+	
+	# apply the prompt
+	PS1="$(trim_all "${prompts}") "
+	export PS1
 }

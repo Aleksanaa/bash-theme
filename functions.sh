@@ -3,13 +3,6 @@
 source ./colors.sh
 source ./icons.sh
 
-# source gitstatus plugin
-if which gitstatusd > /dev/null 2>&1; then
-	GITSTATUS_PLUGIN_PATH=$(realpath "$(dirname $(which gitstatusd))/../share/gitstatus")
-	source ${GITSTATUS_PLUGIN_PATH}/gitstatus.plugin.sh
-	HAS_GITSTATUS=1
-fi
-
 # trim function, from dylanaraps
 # https://github.com/dylanaraps/pure-sh-bible#trim-all-white-space-from-string-and-truncate-spaces
 trim_all() {
@@ -63,7 +56,7 @@ get_hostname() {
 }
 
 get_arrow() {
-	if [ $? -eq 0 ]; then
+	if [[ $1 == 0 ]]; then
 		_color yellow
 	else
 		_color red
@@ -73,7 +66,7 @@ get_arrow() {
 }
 
 get_gitstatus() {
-	if [ -n ${HAS_GITSTATUS} ]; then
+	if [[ ${HAS_GITSTATUS} == 1 ]]; then
 		local output='';
 		if gitstatus_query && [[ "$VCS_STATUS_RESULT" == ok-sync ]]; then
 			if [[ -n "$VCS_STATUS_LOCAL_BRANCH" ]]; then
@@ -81,10 +74,22 @@ get_gitstatus() {
 			else
 				output+=" @${VCS_STATUS_COMMIT//\\/\\\\}"       # escape backslash
 			fi
-			(( VCS_STATUS_HAS_STAGED )) && output+='+'
-			(( VCS_STATUS_HAS_UNSTAGED )) && output+="${ICON_PENCIL}"
-			(( VCS_STATUS_HAS_UNTRACKED )) && output+='?'
+			(( VCS_STATUS_NUM_STAGED )) && output+="${ICON_TICK}${VCS_STATUS_NUM_STAGED}"
+			(( VCS_STATUS_NUM_UNSTAGED )) && output+="${ICON_PENCIL}${VCS_STATUS_NUM_UNSTAGED}"
+			(( VCS_STATUS_NUM_UNTRACKED )) && output+="${ICON_WARN}${VCS_STATUS_NUM_UNTRACKED}"
+			(( VCS_STATUS_COMMITS_AHEAD )) && output+="${ICON_UPARROW}${VCS_STATUS_COMMITS_AHEAD}"
+			(( VCS_STATUS_COMMITS_BEHIND )) && output+="${ICON_DOWNARROW}${VCS_STATUS_COMMITS_BEHIND}"
+
 		fi
 		printf "${output}"
 	fi
 }
+
+# source gitstatus plugin
+which gitstatusd > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+	GITSTATUS_PLUGIN_PATH=$(realpath "$(dirname $(which gitstatusd))/../share/gitstatus")
+	source ${GITSTATUS_PLUGIN_PATH}/gitstatus.plugin.sh
+	gitstatus_stop && gitstatus_start
+	HAS_GITSTATUS=1
+fi
