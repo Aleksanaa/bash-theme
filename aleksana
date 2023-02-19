@@ -5,8 +5,7 @@
 
 # I'm trying to make the scripts structured and self-explanatory.
 
-
-source ./functions.sh
+source $(dirname $0)/functions.sh
 
 PROMPT_COMMAND=prompting
 prompting() {

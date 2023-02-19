@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-source ./colors.sh
-source ./icons.sh
+source $(dirname $0)/colors.sh
+source $(dirname $0)/icons.sh
 
 # trim function, from dylanaraps
 # https://github.com/dylanaraps/pure-sh-bible#trim-all-white-space-from-string-and-truncate-spaces
@@ -87,8 +87,11 @@ get_gitstatus() {
 
 # source gitstatus plugin
 which gitstatusd > /dev/null 2>&1
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ] && [ -z ${GITSTATUS_PLUGIN_PATH} ]; then
 	GITSTATUS_PLUGIN_PATH=$(realpath "$(dirname $(which gitstatusd))/../share/gitstatus")
+fi
+
+if [ -n ${GITSTATUS_PLUGIN_PATH} ]; then
 	source ${GITSTATUS_PLUGIN_PATH}/gitstatus.plugin.sh
 	gitstatus_stop && gitstatus_start
 	HAS_GITSTATUS=1
