@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# This is Aleksana's bash theme. Because all bash themes sucks, or 
+# simply don't meet my requirements, I made this as my daily driver.
+
+# I'm trying to make the scripts structured and self-explanatory.
+
+
+source ./functions.sh
+
+# set prompt order
+MY_PROMPTS="$(get_hostname) :: $(get_path) $(get_gitstatus) $(get_arrow)"
+
+# applying the prompt
+PROMPT_COMMAND=prompting
+prompting() {
+	export PS1="$(trim_all ${MY_PROMPTS}) "
+}
