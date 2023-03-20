@@ -27,8 +27,10 @@ shrink_path() {
 	_color green
 	if [[ ${path} == "~" ]]; then
 		printf "${ICON_HOME} ~"
-	else
+	elif [[ ${path} == "~/"* ]]; then
 		printf "${ICON_FOLDER} ${path}"
+	else
+		printf "${ICON_CONTROL} ${path}"
 	fi
 	_reset
 }
